@@ -1,0 +1,51 @@
+{
+  "name": "camunda-modeler-webpack-plugins",
+  "version": "0.0.0",
+  "description": "Webpack plugins to easily configure Camunda Modeler extensions",
+  "main": "src/index.js",
+  "scripts": {
+    "all": "run-s lint test",
+    "lint": "eslint .",
+    "test": "mocha -r esm 'test/**/*.spec.js'",
+    "dev": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins.git"
+  },
+  "keywords": [
+    "camunda-modeler",
+    "camunda-modeler-plugin",
+    "webpack",
+    "webpack-plugin"
+  ],
+  "author": "Niklas Kiefer <niklas.kiefer@camunda.com (https://github.com/pinussilvestrus)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins/issues"
+  },
+  "homepage": "https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins#readme",
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "camunda-modeler-plugin-helpers": "^5.0.0-alpha.0",
+    "chai": "^4.3.6",
+    "eslint": "^7.32.0",
+    "eslint-plugin-bpmn-io": "^0.13.0",
+    "eslint-plugin-import": "^2.25.4",
+    "esm": "^3.2.25",
+    "memory-fs": "^0.5.0",
+    "mocha": "^8.4.0",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^5.68.0"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.16.5",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.3"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0",
+    "webpack": ">=4.0.0",
+    "camunda-modeler-plugin-helpers": ">=5.0.0-alpha.0"
+  }
+}
