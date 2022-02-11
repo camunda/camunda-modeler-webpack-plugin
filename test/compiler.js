@@ -43,6 +43,8 @@ export function compiler(entry, plugins) {
 export async function compile(fixture, plugins) {
   const stats = await compiler(fixture, plugins);
 
+  const config = stats.compilation.options;
+
   const module = stats.toJson({ source: true }).modules.find(m => m.id === fixture);
 
   expect(module).to.exist;
@@ -50,7 +52,8 @@ export async function compile(fixture, plugins) {
   return {
     stats,
     module,
-    code: module.source
+    code: module.source,
+    config
   };
 }
 
@@ -58,4 +61,16 @@ export function printCompileErrors(error) {
   if (error && error.stats) {
     console.log(error.stats.compilation.errors);
   }
+}
+
+export function findRule(rules, pattern) {
+  return rules.find(rule => {
+    return rule.use.loader.match(pattern);
+  });
+}
+
+export function findAlias(alias, expected) {
+  return Object.entries(alias).find(a => {
+    return JSON.stringify(a) === JSON.stringify(expected);
+  });
 }
