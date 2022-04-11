@@ -6,7 +6,7 @@ function Props(element) {
   return [
     {
       id: 'spell',
-      component: <Prop id="spell" element={ element } />,
+      component: Prop,
       isEdited: isTextFieldEntryEdited
     }
   ];

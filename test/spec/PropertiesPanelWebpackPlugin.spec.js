@@ -59,4 +59,50 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
     ).to.exist;
   });
 
+
+  describe('configuration', function() {
+
+    it('should NOT set rules', async function() {
+
+      // given
+      const entry = './fixtures/noop-extension/index.js';
+
+      // when
+      const { config } = await compile(entry, [
+        new PropertiesPanelWebpackPlugin({
+          loader: false
+        })
+      ]);
+
+      // then
+      expect(
+        findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+      ).not.to.exist;
+    });
+
+
+    it('should set alias', async function() {
+
+      // given
+      const entry = './fixtures/noop-extension/index.js';
+
+      // when
+      const { config } = await compile(entry, [
+        new PropertiesPanelWebpackPlugin({
+          alias: false
+        })
+      ]);
+
+      // then
+      expect(
+        findAlias(config.resolve.alias, [ '@bpmn-io/properties-panel', 'camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel' ])
+      ).not.to.exist;
+
+      expect(
+        findAlias(config.resolve.alias, [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ])
+      ).not.to.exist;
+    });
+
+  });
+
 });

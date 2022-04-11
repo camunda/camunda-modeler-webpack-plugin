@@ -70,7 +70,7 @@ export function findRule(rules, pattern) {
 }
 
 export function findAlias(alias, expected) {
-  return Object.entries(alias).find(a => {
+  return Object.entries(alias || {}).find(a => {
     return JSON.stringify(a) === JSON.stringify(expected);
   });
 }

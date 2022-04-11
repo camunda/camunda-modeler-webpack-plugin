@@ -36,6 +36,32 @@ module.exports = {
 };
 ```
 
+## Configuration
+
+You can pass configuration options to the plugins: 
+
+```js
+plugins: [
+  new ClientExtensionWebpackPlugin({
+    loader: false
+  })
+]
+```
+
+### ClientExtensionWebpackPlugin
+
+| Name | Default | Description |
+| ----------- | ----------- | ----------- |
+| `alias` | true | Append React `alias` configuration |
+| `loader` | true | Append `babel-loader` configuration (requires `@babel/core` dependency) |
+
+### PropertiesPanelWebpackPlugin
+
+| Name | Default | Description |
+| ----------- | ----------- | ----------- |
+| `alias` | true | Append Properties Panel `alias` configuration |
+| `loader` | true | Append `babel-loader` configuration (requires `@babel/core` dependency) |
+
 ## Resources
 
 * [Camunda Modeler plugins documentation](https://github.com/camunda/camunda-modeler/tree/master/docs/plugins#plugging-into-the-camunda-modeler)

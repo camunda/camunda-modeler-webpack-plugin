@@ -1,4 +1,7 @@
-const defaultOptions = {};
+const defaultOptions = {
+  alias: true,
+  loader: true
+};
 
 const CONFIG_PATH = './config/client-extension.config';
 
@@ -17,13 +20,17 @@ class ClientExtensionWebpackPlugin {
     compiler.hooks.afterEnvironment.tap('PropertiesPanelWebpackPlugin', () => {
 
       // babel loader
-      compiler.options.module.rules.push(...config.module.rules);
+      if (this.options.loader) {
+        compiler.options.module.rules.push(...config.module.rules);
+      }
 
       // alias
-      compiler.options.resolve.alias = {
-        ...compiler.options.resolve.alias,
-        ...config.resolve.alias
-      };
+      if (this.options.alias) {
+        compiler.options.resolve.alias = {
+          ...compiler.options.resolve.alias,
+          ...config.resolve.alias
+        };
+      }
     });
   }
 }

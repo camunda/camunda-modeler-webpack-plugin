@@ -58,4 +58,46 @@ describe('<ClientExtensionWebpackPlugin>', function() {
     ).to.exist;
   });
 
+
+  describe('configuration', function() {
+
+    it('should NOT set rules', async function() {
+
+      // given
+      const entry = './fixtures/noop-extension/index.js';
+
+      // when
+      const { config } = await compile(entry, [
+        new ClientExtensionWebpackPlugin({
+          loader: false
+        })
+      ]);
+
+      // then
+      expect(
+        findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+      ).not.to.exist;
+    });
+
+
+    it('should set alias', async function() {
+
+      // given
+      const entry = './fixtures/noop-extension/index.js';
+
+      // when
+      const { config } = await compile(entry, [
+        new ClientExtensionWebpackPlugin({
+          alias: false
+        })
+      ]);
+
+      // then
+      expect(
+        findAlias(config.resolve.alias, [ 'react', 'camunda-modeler-plugin-helpers/react' ])
+      ).not.to.exist;
+    });
+
+  });
+
 });
