@@ -2,10 +2,13 @@ import { compile, findAlias, findRule } from '../compiler';
 
 import { expect } from 'chai';
 
-import { PropertiesPanelWebpackPlugin } from '../../src';
+import CamundaModelerWebpackPlugin from '../../src';
 
 
-describe('<PropertiesPanelWebpackPlugin>', function() {
+describe('<type = propertiesPanel>', function() {
+
+  this.timeout(5000);
+
 
   it('should compile without errors', async function() {
 
@@ -13,9 +16,7 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { stats } = await compile(entry, [
-      new PropertiesPanelWebpackPlugin()
-    ]);
+    const { stats } = await bootstrap(entry);
 
     // then
     expect(stats.compilation.errors).to.be.empty;
@@ -28,13 +29,11 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { config } = await compile(entry, [
-      new PropertiesPanelWebpackPlugin()
-    ]);
+    const { config } = await bootstrap(entry);
 
     // then
     expect(
-      findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+      findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
     ).to.exist;
   });
 
@@ -45,9 +44,7 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { config } = await compile(entry, [
-      new PropertiesPanelWebpackPlugin()
-    ]);
+    const { config } = await bootstrap(entry);
 
     // then
     expect(
@@ -68,30 +65,26 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await compile(entry, [
-        new PropertiesPanelWebpackPlugin({
-          loader: false
-        })
-      ]);
+      const { config } = await bootstrap(entry, {
+        loader: false
+      });
 
       // then
       expect(
-        findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+        findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
       ).not.to.exist;
     });
 
 
-    it('should set alias', async function() {
+    it('should NOT set alias', async function() {
 
       // given
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await compile(entry, [
-        new PropertiesPanelWebpackPlugin({
-          alias: false
-        })
-      ]);
+      const { config } = await bootstrap(entry, {
+        alias: false
+      });
 
       // then
       expect(
@@ -106,3 +99,15 @@ describe('<PropertiesPanelWebpackPlugin>', function() {
   });
 
 });
+
+
+// helper //////////////
+
+async function bootstrap(entry, options = {}) {
+  return await compile(entry, [
+    new CamundaModelerWebpackPlugin({
+      type: 'propertiesPanel',
+      ...options
+    })
+  ]);
+}

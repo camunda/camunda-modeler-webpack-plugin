@@ -2,10 +2,9 @@ import { compile, findAlias, findRule } from '../compiler';
 
 import { expect } from 'chai';
 
-import { ClientExtensionWebpackPlugin } from '../../src';
+import CamundaModelerWebpackPlugin from '../../src';
 
-
-describe('<ClientExtensionWebpackPlugin>', function() {
+describe('<type = react>', function() {
 
   this.timeout(5000);
 
@@ -16,9 +15,7 @@ describe('<ClientExtensionWebpackPlugin>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { stats } = await compile(entry, [
-      new ClientExtensionWebpackPlugin()
-    ]);
+    const { stats } = await bootstrap(entry);
 
     // then
     expect(stats.compilation.errors).to.be.empty;
@@ -31,13 +28,11 @@ describe('<ClientExtensionWebpackPlugin>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { config } = await compile(entry, [
-      new ClientExtensionWebpackPlugin()
-    ]);
+    const { config } = await bootstrap(entry);
 
     // then
     expect(
-      findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+      findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
     ).to.exist;
   });
 
@@ -48,9 +43,7 @@ describe('<ClientExtensionWebpackPlugin>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { config } = await compile(entry, [
-      new ClientExtensionWebpackPlugin()
-    ]);
+    const { config } = await bootstrap(entry);
 
     // then
     expect(
@@ -67,30 +60,26 @@ describe('<ClientExtensionWebpackPlugin>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await compile(entry, [
-        new ClientExtensionWebpackPlugin({
-          loader: false
-        })
-      ]);
+      const { config } = await bootstrap(entry, {
+        loader: false
+      });
 
       // then
       expect(
-        findRule(config.module.rules, 'camunda-modeler-webpack-plugins/node_modules/babel-loader')
+        findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
       ).not.to.exist;
     });
 
 
-    it('should set alias', async function() {
+    it('should NOT set alias', async function() {
 
       // given
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await compile(entry, [
-        new ClientExtensionWebpackPlugin({
-          alias: false
-        })
-      ]);
+      const { config } = await bootstrap(entry, {
+        alias: false
+      });
 
       // then
       expect(
@@ -101,3 +90,15 @@ describe('<ClientExtensionWebpackPlugin>', function() {
   });
 
 });
+
+
+// helper //////////////
+
+async function bootstrap(entry, options = {}) {
+  return await compile(entry, [
+    new CamundaModelerWebpackPlugin({
+      type: 'react',
+      ...options
+    })
+  ]);
+}

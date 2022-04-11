@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to [camunda-modeler-webpack-plugins](https://github.com/camunda/camunda-modeler-webpack-plugins) are documented here. We use [semantic versioning](http://semver.org/) for releases.
+All notable changes to [camunda-modeler-webpack-plugin](https://github.com/camunda/camunda-modeler-webpack-plugin) are documented here. We use [semantic versioning](http://semver.org/) for releases.
 
 ## Unreleased
 
