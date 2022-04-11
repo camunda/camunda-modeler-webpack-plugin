@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins.git"
+    "url": "git+https://github.com/camunda/camunda-modeler-webpack-plugins.git"
   },
   "keywords": [
     "camunda-modeler",
@@ -19,7 +19,16 @@
     "webpack",
     "webpack-plugin"
   ],
-  "author": "Niklas Kiefer <niklas.kiefer@camunda.com (https://github.com/pinussilvestrus)",
+  "author": {
+    "name": "Niklas Kiefer",
+    "url": "https://github.com/pinussilvestrus"
+  },
+  "contributors": [
+    {
+      "name": "bpmn.io contributors",
+      "url": "https://github.com/bpmn-io"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins/issues"
