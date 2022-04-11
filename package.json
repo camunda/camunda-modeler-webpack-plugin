@@ -27,7 +27,7 @@
   "homepage": "https://github.com/pinussilvestrus/camunda-modeler-webpack-plugins#readme",
   "devDependencies": {
     "@babel/core": "^7.16.5",
-    "camunda-modeler-plugin-helpers": "^5.0.0-alpha.0",
+    "camunda-modeler-plugin-helpers": "^5.0.0",
     "chai": "^4.3.6",
     "eslint": "^7.32.0",
     "eslint-plugin-bpmn-io": "^0.13.0",
@@ -46,6 +46,6 @@
   "peerDependencies": {
     "@babel/core": ">=7.0.0",
     "webpack": ">=4.0.0",
-    "camunda-modeler-plugin-helpers": ">=5.0.0-alpha.0"
+    "camunda-modeler-plugin-helpers": ">=5.0.0"
   }
 }
