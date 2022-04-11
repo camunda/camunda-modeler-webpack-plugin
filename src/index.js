@@ -1,7 +1,3 @@
-const ClientExtensionWebpackPlugin = require('./ClientExtensionWebpackPlugin');
-const PropertiesPanelWebpackPlugin = require('./PropertiesPanelWebpackPlugin');
+const CamundaModelerWebpackPlugin = require('./CamundaModelerWebpackPlugin');
 
-module.exports = {
-  ClientExtensionWebpackPlugin,
-  PropertiesPanelWebpackPlugin
-};
+module.exports = CamundaModelerWebpackPlugin;
