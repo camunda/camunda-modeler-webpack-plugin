@@ -1,15 +1,26 @@
 const defaultOptions = {
   type: '',
-  alias: true,
-  loader: true
+  propertiesPanelAlias: true,
+  propertiesPanelLoader: true,
+  reactAlias: true,
+  reactLoader: true
 };
 
-const CONFIG_PATHS = {
-  'react': './config/react.config.js',
-  'propertiesPanel': './config/propertiesPanel.config.js'
-};
+const CONFIGURATIONS = [
+  {
+    key: 'propertiesPanel',
+    path: './config/propertiesPanel.config.js',
+    aliasFlag: 'propertiesPanelAlias',
+    loaderFlag: 'propertiesPanelLoader'
+  },
+  {
+    key: 'react',
+    path: './config/react.config.js',
+    aliasFlag: 'reactAlias',
+    loaderFlag: 'reactLoader'
+  }
+];
 
-const DEFAULT_TYPE = 'react';
 
 class CamundaModelerWebpackPlugin {
 
@@ -17,9 +28,11 @@ class CamundaModelerWebpackPlugin {
    * Webpack plugin to easily configure Camunda Modeler extensions.
    *
    * @param {Object} [options]
-   * @param {string} [options.type]
-   * @param {boolean} [options.alias]
-   * @param {boolean} [options.loader]
+   * @param {('propertiesPanel'|'react')} [options.type]
+   * @param {boolean} [options.propertiesPanelAlias]
+   * @param {boolean} [options.propertiesPanelLoader]
+   * @param {boolean} [options.reactAlias]
+   * @param {boolean} [options.reactLoader]
    */
   constructor(options = {}) {
     this.options = Object.assign({}, defaultOptions, options);
@@ -29,45 +42,64 @@ class CamundaModelerWebpackPlugin {
    * @param {WebpackCompiler} compiler
    */
   apply(compiler) {
+    const options = this.options;
+
     const {
-      alias,
-      loader
-    } = this.options;
+      type,
+    } = options;
 
-    let {
-      type
-    } = this.options;
+    let configs = [];
 
-    // use default, allow zero-config setup
+    // set all as default, allow zero-config setup
     if (!type) {
-      type = DEFAULT_TYPE;
+      configs = CONFIGURATIONS;
+    } else {
+      const config = findConfig(type, CONFIGURATIONS);
+
+      if (!config) {
+        throw new Error('unknown type <' + type + '>');
+      }
+
+      configs.push(config);
     }
 
-    const configPath = CONFIG_PATHS[type];
-
-    if (!configPath) {
-      throw new Error('unknown type <' + type + '>');
-    }
-
-    const config = require(configPath)();
-
-    // merge config
+    // merge configs
     compiler.hooks.afterEnvironment.tap('CamundaModelerWebpackPlugin', () => {
 
-      // babel loader
-      if (loader) {
-        compiler.options.module.rules.push(...config.module.rules);
-      }
+      configs.forEach((config) => {
+        const {
+          path,
+          aliasFlag,
+          loaderFlag
+        } = config;
 
-      // alias
-      if (alias) {
-        compiler.options.resolve.alias = {
-          ...compiler.options.resolve.alias,
-          ...config.resolve.alias
-        };
-      }
+        const alias = options[aliasFlag];
+        const loader = options[loaderFlag];
+
+        const webpackConfig = require(path)();
+
+        // append (babel) loader
+        if (loader) {
+          compiler.options.module.rules.push(...webpackConfig.module.rules);
+        }
+
+        // append alias
+        if (alias) {
+          compiler.options.resolve.alias = {
+            ...compiler.options.resolve.alias,
+            ...webpackConfig.resolve.alias
+          };
+        }
+      });
     });
   }
 }
 
 module.exports = CamundaModelerWebpackPlugin;
+
+
+// helper //////////////
+
+function findConfig(key, configs) {
+  return configs.find(config => config.key === key);
+}

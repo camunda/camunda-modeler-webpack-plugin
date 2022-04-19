@@ -12,50 +12,42 @@ npm i --save-dev camunda-modeler-webpack-plugin
 
 ## Usage
 
-Add a plugin to your webpack config. For example to configure a React client extension:
+Add the plugin to your webpack config.
 
 ```js
-const ModelerPlugin = require('camunda-modeler-webpack-plugin');
+const CamundaModelerWebpackPlugin = require('camunda-modeler-webpack-plugin');
 
 module.exports = {
   plugins: [
-    new ModelerPlugin()
-  ]
-};
-```
-
-or a properties panel extension:
-
-```js
-const ModelerPlugin = require('camunda-modeler-webpack-plugin');
-
-module.exports = {
-  plugins: [
-    new ModelerPlugin({
-      type: 'propertiesPanel'
-    })
+    new CamundaModelerWebpackPlugin()
   ]
 };
 ```
 
 ## Configuration
 
-You can pass configuration options to the plugins: 
+You can pass options to customize the resulting webpack configuration. 
+
+For example, in case you build a plugin to only extend the Properties Panel without using JSX syntax:
 
 ```js
 plugins: [
-  new ModelerPlugin({
+  new CamundaModelerWebpackPlugin({
     type: 'propertiesPanel',
-    loader: false
+    propertiesPanelLoader: false
   })
 ]
 ```
 
+Following options are available:
+
 | Name | Default | Description |
 | ----------- | ----------- | ----------- |
-| `alias` | true | Append `alias` configuration |
-| `loader` | true | Append `babel-loader` configuration (requires `@babel/core` dependency) |
-| `type` | 'react' | Type of the Camunda Modeler Plugin, allowed values: `react`, `propertiesPanel` |
+| `propertiesPanelAlias` | true | Append Properties Panel `alias` configuration |
+| `propertiesPanelLoader` | true | Append Properties Panel `babel-loader` configuration (requires `@babel/core` dependency) |
+| `reactAlias` | true | Append React `alias` configuration |
+| `reactLoader` | true | Append React `babel-loader` configuration (requires `@babel/core` dependency) |
+| `type` |  | Specific type of the Camunda Modeler Plugin. Only [the configuration](./src/config/) of the given type will be appended. Allowed values: `react`, `propertiesPanel` |
 
 ## Resources
 

@@ -10,6 +10,18 @@ describe('<type = propertiesPanel>', function() {
   this.timeout(5000);
 
 
+  it('should work with zero-config', async function() {
+
+    // when
+    const { stats } = await compile('./fixtures/properties-panel-extension/index.js', [
+      new CamundaModelerWebpackPlugin()
+    ]);
+
+    // then
+    expect(stats.compilation.errors).to.be.empty;
+  });
+
+
   it('should compile without errors', async function() {
 
     // given
@@ -66,7 +78,7 @@ describe('<type = propertiesPanel>', function() {
 
       // when
       const { config } = await bootstrap(entry, {
-        loader: false
+        propertiesPanelLoader: false
       });
 
       // then
@@ -83,7 +95,7 @@ describe('<type = propertiesPanel>', function() {
 
       // when
       const { config } = await bootstrap(entry, {
-        alias: false
+        propertiesPanelAlias: false
       });
 
       // then
