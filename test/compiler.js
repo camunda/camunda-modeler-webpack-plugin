@@ -74,3 +74,15 @@ export function findAlias(alias, expected) {
     return JSON.stringify(a) === JSON.stringify(expected);
   });
 }
+
+export function findMultipleAlias(alias, expected) {
+  if (!alias || !expected) return false;
+
+  const aliasEntries = Object.entries(alias);
+
+  // Ensure every expected pair exists in alias
+  return expected.every((value, index, arr) => {
+    if (index % 2 !== 0) return true;
+    return aliasEntries.some(([ key, val ]) => key === arr[index] && val === arr[index + 1]);
+  });
+}
