@@ -5,7 +5,7 @@ import memoryfs from 'memory-fs';
 import { expect } from 'chai';
 
 
-export function compiler(entry, plugins) {
+export function compiler(entry, plugins, rules = []) {
   const compiler = webpack({
     mode: 'development',
     context: __dirname,
@@ -16,7 +16,10 @@ export function compiler(entry, plugins) {
     },
     plugins: [
       ...plugins
-    ]
+    ],
+    module: {
+      rules: rules || []
+    }
   });
 
   compiler.outputFileSystem = new memoryfs();
@@ -40,8 +43,8 @@ export function compiler(entry, plugins) {
   });
 }
 
-export async function compile(fixture, plugins) {
-  const stats = await compiler(fixture, plugins);
+export async function compile(fixture, plugins, rules = []) {
+  const stats = await compiler(fixture, plugins, rules);
 
   const config = stats.compilation.options;
 
