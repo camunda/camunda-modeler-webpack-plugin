@@ -1,4 +1,10 @@
-import { compile, findAlias, findRule } from '../compiler';
+import {
+  compile as webpackCompile,
+  configuredBabelLoader,
+  configuredBpmnJSPropertiesPanelAlias,
+  configuredPropertiesPanelAlias,
+  expectNoErrors
+} from '../compiler';
 
 import { expect } from 'chai';
 
@@ -12,13 +18,18 @@ describe('<type = propertiesPanel>', function() {
 
   it('should work with zero-config', async function() {
 
+    // given
+    const entry = './fixtures/properties-panel-extension/index.js';
+
     // when
-    const { stats } = await compile('./fixtures/properties-panel-extension/index.js', [
+    const {
+      stats
+    } = await compile(entry, [
       new CamundaModelerWebpackPlugin()
     ]);
 
     // then
-    expect(stats.compilation.errors).to.be.empty;
+    expectNoErrors(stats);
   });
 
 
@@ -28,10 +39,10 @@ describe('<type = propertiesPanel>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { stats } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(stats.compilation.errors).to.be.empty;
+    expectNoErrors(stats);
   });
 
 
@@ -41,12 +52,10 @@ describe('<type = propertiesPanel>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { config } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(
-      findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
-    ).to.exist;
+    expect(configuredBabelLoader(stats)).to.exist;
   });
 
 
@@ -56,16 +65,33 @@ describe('<type = propertiesPanel>', function() {
     const entry = './fixtures/properties-panel-extension/index.js';
 
     // when
-    const { config } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(
-      findAlias(config.resolve.alias, [ '@bpmn-io/properties-panel', 'camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel' ])
-    ).to.exist;
+    expect(configuredPropertiesPanelAlias(stats)).to.exist;
+    expect(configuredBpmnJSPropertiesPanelAlias(stats)).to.exist;
+  });
 
-    expect(
-      findAlias(config.resolve.alias, [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ])
-    ).to.exist;
+
+  it('should replace references', async function() {
+
+    // given
+    const entry = './fixtures/properties-panel-extension/provider/index.js';
+
+    // when
+    const {
+      stats,
+      output
+    } = await compile(entry);
+
+    // then
+    expectNoErrors(stats);
+
+    expect(output).not.to.include("'bpmn-js-properties-panel'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel.js"');
+
+    expect(output).not.to.include("'@bpmn-io/properties-panel'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel/index.js"');
   });
 
 
@@ -77,14 +103,12 @@ describe('<type = propertiesPanel>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await bootstrap(entry, {
+      const { stats } = await compile(entry, {
         propertiesPanelLoader: false
       });
 
       // then
-      expect(
-        findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
-      ).not.to.exist;
+      expect(configuredBabelLoader(stats)).not.to.exist;
     });
 
 
@@ -94,18 +118,13 @@ describe('<type = propertiesPanel>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await bootstrap(entry, {
+      const { stats } = await compile(entry, {
         propertiesPanelAlias: false
       });
 
       // then
-      expect(
-        findAlias(config.resolve.alias, [ '@bpmn-io/properties-panel', 'camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel' ])
-      ).not.to.exist;
-
-      expect(
-        findAlias(config.resolve.alias, [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ])
-      ).not.to.exist;
+      expect(configuredPropertiesPanelAlias(stats)).not.to.exist;
+      expect(configuredBpmnJSPropertiesPanelAlias(stats)).not.to.exist;
     });
 
   });
@@ -115,8 +134,8 @@ describe('<type = propertiesPanel>', function() {
 
 // helper //////////////
 
-async function bootstrap(entry, options = {}) {
-  return await compile(entry, [
+function compile(entry, options = {}) {
+  return webpackCompile(entry, [
     new CamundaModelerWebpackPlugin({
       type: 'propertiesPanel',
       ...options

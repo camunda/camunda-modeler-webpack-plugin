@@ -39,7 +39,7 @@ class CamundaModelerWebpackPlugin {
   }
 
   /**
-   * @param {WebpackCompiler} compiler
+   * @param {import('webpack').Compiler} compiler
    */
   apply(compiler) {
     const options = this.options;
