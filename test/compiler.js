@@ -5,8 +5,13 @@ import { memfs } from 'memfs';
 
 import { expect } from 'chai';
 
-
-export async function compiler(entry, plugins) {
+/**
+ * @param { string } entry
+ * @param { any[] } plugins
+ *
+ * @return { Promise<{ output: string, stats: import('webpack').Stats }> }
+ */
+export async function compile(entry, plugins) {
 
   const {
     fs
@@ -40,24 +45,11 @@ export async function compiler(entry, plugins) {
 
   const stats = await run();
 
-  return {
-    stats
-  };
-}
-
-/**
- * @return { { code: string, stats: import('webpack').Stats } }
- */
-export async function compile(fixture, plugins) {
-  const {
-    bundle,
-    stats
-  } = await compiler(fixture, plugins);
+  const output = await fs.promises.readFile(path.resolve(__dirname, 'bundle.js'), 'utf8');
 
   return {
     stats,
-    code: bundle,
-    config: stats.config
+    output
   };
 }
 
