@@ -1,11 +1,17 @@
 import path from 'path';
 import webpack from 'webpack';
-import memoryfs from 'memory-fs';
+
+import { memfs } from 'memfs';
 
 import { expect } from 'chai';
 
 
 export function compiler(entry, plugins) {
+
+  const {
+    fs
+  } = memfs();
+
   const compiler = webpack({
     mode: 'development',
     context: __dirname,
@@ -19,7 +25,7 @@ export function compiler(entry, plugins) {
     ]
   });
 
-  compiler.outputFileSystem = new memoryfs();
+  compiler.outputFileSystem = fs;
 
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
