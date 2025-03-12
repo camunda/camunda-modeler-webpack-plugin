@@ -1,8 +1,14 @@
-import { compile, findAlias, findRule } from '../compiler';
+import {
+  compile as webpackCompile,
+  configuredBabelLoader,
+  configuredReactAlias,
+  expectNoErrors
+} from '../compiler';
 
 import { expect } from 'chai';
 
 import CamundaModelerWebpackPlugin from '../../src';
+
 
 describe('<type = react>', function() {
 
@@ -17,7 +23,7 @@ describe('<type = react>', function() {
     ]);
 
     // then
-    expect(stats.compilation.errors).to.be.empty;
+    expectNoErrors(stats);
   });
 
 
@@ -27,10 +33,10 @@ describe('<type = react>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { stats } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(stats.compilation.errors).to.be.empty;
+    expectNoErrors(stats);
   });
 
 
@@ -40,12 +46,10 @@ describe('<type = react>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { config } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(
-      findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
-    ).to.exist;
+    expect(configuredBabelLoader(stats)).to.exist;
   });
 
 
@@ -55,12 +59,10 @@ describe('<type = react>', function() {
     const entry = './fixtures/client-extension/index.js';
 
     // when
-    const { config } = await bootstrap(entry);
+    const { stats } = await compile(entry);
 
     // then
-    expect(
-      findAlias(config.resolve.alias, [ 'react', 'camunda-modeler-plugin-helpers/react' ])
-    ).to.exist;
+    expect(configuredReactAlias(stats)).to.exist;
   });
 
 
@@ -72,14 +74,12 @@ describe('<type = react>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await bootstrap(entry, {
+      const { stats } = await compile(entry, {
         reactLoader: false
       });
 
       // then
-      expect(
-        findRule(config.module.rules, 'camunda-modeler-webpack-plugin/node_modules/babel-loader')
-      ).not.to.exist;
+      expect(configuredBabelLoader(stats)).not.to.exist;
     });
 
 
@@ -89,14 +89,12 @@ describe('<type = react>', function() {
       const entry = './fixtures/noop-extension/index.js';
 
       // when
-      const { config } = await bootstrap(entry, {
+      const { stats } = await compile(entry, {
         reactAlias: false
       });
 
       // then
-      expect(
-        findAlias(config.resolve.alias, [ 'react', 'camunda-modeler-plugin-helpers/react' ])
-      ).not.to.exist;
+      expect(configuredReactAlias(stats)).not.to.exist;
     });
 
   });
@@ -106,8 +104,8 @@ describe('<type = react>', function() {
 
 // helper //////////////
 
-async function bootstrap(entry, options = {}) {
-  return await compile(entry, [
+function compile(entry, options = {}) {
+  return webpackCompile(entry, [
     new CamundaModelerWebpackPlugin({
       type: 'react',
       ...options

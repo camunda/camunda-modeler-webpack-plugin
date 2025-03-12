@@ -6,7 +6,7 @@ import { memfs } from 'memfs';
 import { expect } from 'chai';
 
 
-export function compiler(entry, plugins) {
+export async function compiler(entry, plugins) {
 
   const {
     fs
@@ -27,56 +27,90 @@ export function compiler(entry, plugins) {
 
   compiler.outputFileSystem = fs;
 
-  return new Promise((resolve, reject) => {
+  const run = () => new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
 
-      if (stats.hasErrors()) {
-        err = err || new Error('bundle build error');
-      }
-
       if (err) {
-        err.stats = stats;
-        console.log(err.stats.compilation.errors);
-
         return reject(err);
       }
 
       resolve(stats);
     });
   });
-}
 
-export async function compile(fixture, plugins) {
-  const stats = await compiler(fixture, plugins);
-
-  const config = stats.compilation.options;
-
-  const module = stats.toJson({ source: true }).modules.find(m => m.id === fixture);
-
-  expect(module).to.exist;
+  const stats = await run();
 
   return {
-    stats,
-    module,
-    code: module.source,
-    config
+    stats
   };
 }
 
-export function printCompileErrors(error) {
-  if (error && error.stats) {
-    console.log(error.stats.compilation.errors);
-  }
+/**
+ * @return { { code: string, stats: import('webpack').Stats } }
+ */
+export async function compile(fixture, plugins) {
+  const {
+    bundle,
+    stats
+  } = await compiler(fixture, plugins);
+
+  return {
+    stats,
+    code: bundle,
+    config: stats.config
+  };
 }
 
-export function findRule(rules, pattern) {
+export function expectNoErrors(stats) {
+  expect(stats.compilation.errors).to.be.empty;
+}
+
+/**
+ * @param { import('webpack').Stats } stats
+ * @param { string } pattern
+ *
+ * @return { any }
+ */
+export function configuredRule(stats, pattern) {
+  const rules = stats.compilation.options.module.rules;
+
   return rules.find(rule => {
     return rule.use.loader.match(pattern);
   });
 }
 
-export function findAlias(alias, expected) {
+/**
+ * @param { import('webpack').Stats } stats
+ * @param { any } expected
+ *
+ * @return { any }
+ */
+export function configuredAlias(stats, expected) {
+  const alias = stats.compilation.options.resolve.alias;
+
   return Object.entries(alias || {}).find(a => {
     return JSON.stringify(a) === JSON.stringify(expected);
   });
+}
+
+const CONFIG_BABEL_LOADER = 'camunda-modeler-webpack-plugin/node_modules/babel-loader';
+
+const CONFIG_PROPERTIES_PANEL_ALIAS = [ '@bpmn-io/properties-panel', 'camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel' ];
+const CONFIG_BPMN_JS_PROPERTIES_PANEL_ALIAS = [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ];
+const CONFIG_REACT_ALIAS = [ 'react', 'camunda-modeler-plugin-helpers/react' ];
+
+export function configuredReactAlias(stats) {
+  return configuredAlias(stats, CONFIG_REACT_ALIAS);
+}
+
+export function configuredBpmnJSPropertiesPanelAlias(stats) {
+  return configuredAlias(stats, CONFIG_BPMN_JS_PROPERTIES_PANEL_ALIAS);
+}
+
+export function configuredPropertiesPanelAlias(stats) {
+  return configuredAlias(stats, CONFIG_PROPERTIES_PANEL_ALIAS);
+}
+
+export function configuredBabelLoader(stats) {
+  return configuredRule(stats, CONFIG_BABEL_LOADER);
 }
