@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from 'camunda-modeler-plugin-helpers/react';
+import React, { Fragment, Component } from 'react';
 
 import { Fill } from 'camunda-modeler-plugin-helpers/components';
 
