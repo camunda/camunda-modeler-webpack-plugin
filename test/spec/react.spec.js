@@ -66,6 +66,25 @@ describe('<type = react>', function() {
   });
 
 
+  it('should replace references', async function() {
+
+    // given
+    const entry = './fixtures/client-extension/client/index.js';
+
+    // when
+    const {
+      stats,
+      output
+    } = await compile(entry);
+
+    // then
+    expectNoErrors(stats);
+
+    expect(output).not.to.include("import React, { Fragment, Component } from 'react'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/react.js"');
+  });
+
+
   describe('configuration', function() {
 
     it('should NOT set rules', async function() {

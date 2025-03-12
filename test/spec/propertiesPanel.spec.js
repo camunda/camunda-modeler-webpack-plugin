@@ -73,6 +73,28 @@ describe('<type = propertiesPanel>', function() {
   });
 
 
+  it('should replace references', async function() {
+
+    // given
+    const entry = './fixtures/properties-panel-extension/provider/index.js';
+
+    // when
+    const {
+      stats,
+      output
+    } = await compile(entry);
+
+    // then
+    expectNoErrors(stats);
+
+    expect(output).not.to.include("'bpmn-js-properties-panel'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel.js"');
+
+    expect(output).not.to.include("'@bpmn-io/properties-panel'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel/index.js"');
+  });
+
+
   describe('configuration', function() {
 
     it('should NOT set rules', async function() {
