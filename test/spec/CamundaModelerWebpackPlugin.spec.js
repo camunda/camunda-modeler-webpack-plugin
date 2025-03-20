@@ -70,4 +70,28 @@ describe('<CamundaModelerWebpackPlugin>', function() {
     throw new Error('this should not happen');
   });
 
+
+  it('should preserve custom rule', async function() {
+
+    // given
+    const entry = './fixtures/client-extension/index.js';
+
+    const styleRule = {
+      test: /\.css/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'style-loader'
+      }
+    };
+
+    // when
+    const { stats } = await compile(entry, [ new CamundaModelerWebpackPlugin({
+      'type': 'react'
+    }) ], [ styleRule ]);
+
+    // then
+    // style rule is preserved
+    expect(stats.compilation.options.module.rules).to.include(styleRule);
+  });
+
 });

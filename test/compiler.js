@@ -11,7 +11,7 @@ import { expect } from 'chai';
  *
  * @return { Promise<{ output: string, stats: import('webpack').Stats }> }
  */
-export async function compile(entry, plugins) {
+export async function compile(entry, plugins, rules = []) {
 
   const {
     fs
@@ -27,7 +27,10 @@ export async function compile(entry, plugins) {
     },
     plugins: [
       ...plugins
-    ]
+    ],
+    module: {
+      rules
+    }
   });
 
   compiler.outputFileSystem = fs;
