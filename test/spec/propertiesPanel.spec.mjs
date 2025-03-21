@@ -4,11 +4,11 @@ import {
   configuredBpmnJSPropertiesPanelAlias,
   configuredPropertiesPanelAlias,
   expectNoErrors
-} from '../compiler';
+} from '../compiler.js';
 
 import { expect } from 'chai';
 
-import CamundaModelerWebpackPlugin from '../../src';
+import CamundaModelerWebpackPlugin from '../../src/index.js';
 
 
 describe('<type = propertiesPanel>', function() {
