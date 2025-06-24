@@ -3,7 +3,7 @@ import {
   configuredBabelLoader,
   configuredReactAlias,
   expectNoErrors
-} from '../compiler.js';
+} from '../compiler.mjs';
 
 import { expect } from 'chai';
 
