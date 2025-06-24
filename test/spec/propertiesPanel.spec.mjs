@@ -4,7 +4,7 @@ import {
   configuredBpmnJSPropertiesPanelAlias,
   configuredPropertiesPanelAlias,
   expectNoErrors
-} from '../compiler.js';
+} from '../compiler.mjs';
 
 import { expect } from 'chai';
 
