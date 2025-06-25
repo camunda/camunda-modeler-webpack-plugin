@@ -1,6 +1,6 @@
 # camunda-modeler-webpack-plugin
 
-[![Build Status](https://github.com/pinussilvestrus/camunda-modeler-webpack-plugin/workflows/CI/badge.svg)](https://github.com/pinussilvestrus/camunda-modeler-webpack-plugin/actions?query=workflow%3ACI)
+[![CI](https://github.com/camunda/camunda-modeler-webpack-plugin/actions/workflows/CI.yml/badge.svg)](https://github.com/camunda/camunda-modeler-webpack-plugin/actions/workflows/CI.yml)
 
 Webpack plugin to easily configure Camunda Modeler extensions.
 
