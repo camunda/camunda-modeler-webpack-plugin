@@ -2,7 +2,7 @@ module.exports = () => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: require.resolve('babel-loader'),
@@ -15,7 +15,7 @@ module.exports = () => ({
   },
   resolve: {
     alias: {
-      react: 'camunda-modeler-plugin-helpers/react'
+      react: 'camunda-modeler-plugin-helpers/vendor/react'
     }
   }
 });
