@@ -1,6 +1,6 @@
 {
   "name": "camunda-modeler-webpack-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Webpack plugin to easily configure Camunda Modeler extensions",
   "main": "src/index.js",
   "files": [
