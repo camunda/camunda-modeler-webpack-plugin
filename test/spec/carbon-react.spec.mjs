@@ -80,8 +80,11 @@ describe('<type = carbon-react>', function() {
     // then
     expectNoErrors(stats);
 
-    expect(output).not.to.include("import React, { Fragment, Component } from 'react'");
+    expect(output).not.to.include("import { IconButton } from '@carbon/react'");
     expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/@carbon/react.js"');
+
+    expect(output).not.to.include("import { Add } from '@carbon/icons-react'");
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/@carbon/icons-react.js"');
   });
 
 
