@@ -101,6 +101,7 @@ const CONFIG_PROPERTIES_PANEL_ALIAS = [ '@bpmn-io/properties-panel', 'camunda-mo
 const CONFIG_BPMN_JS_PROPERTIES_PANEL_ALIAS = [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ];
 const CONFIG_REACT_ALIAS = [ 'react', 'camunda-modeler-plugin-helpers/vendor/react' ];
 const CONFIG_CARBON_REACT_ALIAS = [ '@carbon/react', 'camunda-modeler-plugin-helpers/vendor/@carbon/react' ];
+const CONFIG_CARBON_ICONS_REACT_ALIAS = [ '@carbon/icons-react', 'camunda-modeler-plugin-helpers/vendor/@carbon/icons-react' ];
 
 
 export function configuredReactAlias(stats) {
@@ -120,5 +121,5 @@ export function configuredBabelLoader(stats) {
 }
 
 export function configuredCarbonReactAlias(stats) {
-  return configuredAlias(stats, CONFIG_CARBON_REACT_ALIAS);
+  return configuredAlias(stats, CONFIG_CARBON_REACT_ALIAS) && configuredAlias(stats, CONFIG_CARBON_ICONS_REACT_ALIAS);
 }
