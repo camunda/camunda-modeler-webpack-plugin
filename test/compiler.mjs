@@ -99,7 +99,9 @@ const CONFIG_BABEL_LOADER = 'camunda-modeler-webpack-plugin/node_modules/babel-l
 
 const CONFIG_PROPERTIES_PANEL_ALIAS = [ '@bpmn-io/properties-panel', 'camunda-modeler-plugin-helpers/vendor/@bpmn-io/properties-panel' ];
 const CONFIG_BPMN_JS_PROPERTIES_PANEL_ALIAS = [ 'bpmn-js-properties-panel', 'camunda-modeler-plugin-helpers/vendor/bpmn-js-properties-panel' ];
-const CONFIG_REACT_ALIAS = [ 'react', 'camunda-modeler-plugin-helpers/react' ];
+const CONFIG_REACT_ALIAS = [ 'react', 'camunda-modeler-plugin-helpers/vendor/react' ];
+const CONFIG_CARBON_REACT_ALIAS = [ '@carbon/react', 'camunda-modeler-plugin-helpers/vendor/@carbon/react' ];
+
 
 export function configuredReactAlias(stats) {
   return configuredAlias(stats, CONFIG_REACT_ALIAS);
@@ -115,4 +117,8 @@ export function configuredPropertiesPanelAlias(stats) {
 
 export function configuredBabelLoader(stats) {
   return configuredRule(stats, CONFIG_BABEL_LOADER);
+}
+
+export function configuredCarbonReactAlias(stats) {
+  return configuredAlias(stats, CONFIG_CARBON_REACT_ALIAS);
 }
