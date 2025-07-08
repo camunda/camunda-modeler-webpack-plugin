@@ -81,7 +81,7 @@ describe('<type = react>', function() {
     expectNoErrors(stats);
 
     expect(output).not.to.include("import React, { Fragment, Component } from 'react'");
-    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/react.js"');
+    expect(output).to.include('"../node_modules/camunda-modeler-plugin-helpers/vendor/react.js"');
   });
 
 
