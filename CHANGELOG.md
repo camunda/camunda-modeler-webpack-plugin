@@ -6,6 +6,10 @@ All notable changes to [camunda-modeler-webpack-plugin](https://github.com/camun
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.3.0
+
+* `FEAT`: use `cheap-module-source-map` as default devtool option ([#3](https://github.com/camunda/camunda-modeler-webpack-plugin/issues/3))
+
 ## 0.2.0
 
 * `FEAT`: add `@carbon/react` support for plugins ([#5](https://github.com/camunda/camunda-modeler-webpack-plugin/pull/5))
