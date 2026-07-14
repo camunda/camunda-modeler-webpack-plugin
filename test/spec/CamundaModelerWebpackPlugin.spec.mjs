@@ -99,7 +99,24 @@ describe('<CamundaModelerWebpackPlugin>', function() {
     ]);
 
     // then
-    expect(stats.compilation.options.devtool).not.to.eql('cheap-module-source-map');
+    expect(stats.compilation.options.devtool).to.eql(false);
+  });
+
+
+  it('should set custom devtool', async function() {
+
+    // given
+    const entry = './fixtures/noop-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin({
+        devtool: 'source-map'
+      })
+    ]);
+
+    // then
+    expect(stats.compilation.options.devtool).to.eql('source-map');
   });
 
 

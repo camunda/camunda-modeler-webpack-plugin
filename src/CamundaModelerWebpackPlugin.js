@@ -1,3 +1,32 @@
+/**
+ * @typedef { false
+ *   | 'eval'
+ *   | 'eval-cheap-source-map'
+ *   | 'eval-cheap-module-source-map'
+ *   | 'eval-source-map'
+ *   | 'eval-nosources-source-map'
+ *   | 'eval-nosources-cheap-source-map'
+ *   | 'eval-nosources-cheap-module-source-map'
+ *   | 'cheap-source-map'
+ *   | 'cheap-module-source-map'
+ *   | 'cheap-nosources-source-map'
+ *   | 'cheap-nosources-module-source-map'
+ *   | 'inline-cheap-source-map'
+ *   | 'inline-cheap-module-source-map'
+ *   | 'inline-source-map'
+ *   | 'inline-nosources-source-map'
+ *   | 'inline-nosources-cheap-source-map'
+ *   | 'inline-nosources-cheap-module-source-map'
+ *   | 'hidden-source-map'
+ *   | 'hidden-nosources-source-map'
+ *   | 'hidden-nosources-cheap-source-map'
+ *   | 'hidden-nosources-cheap-module-source-map'
+ *   | 'hidden-cheap-source-map'
+ *   | 'hidden-cheap-module-source-map'
+ *   | 'source-map'
+ * } DevTool
+ */
+
 const defaultOptions = {
   type: '',
   propertiesPanelAlias: true,
@@ -6,7 +35,7 @@ const defaultOptions = {
   reactLoader: true,
   carbonReactAlias: true,
   carbonReactLoader: true,
-  devtool: true
+  devtool: 'cheap-module-source-map'
 };
 
 const CONFIGURATIONS = [
@@ -44,7 +73,7 @@ class CamundaModelerWebpackPlugin {
    * @param {boolean} [options.reactLoader]
    * @param {boolean} [options.carbonReactAlias]
    * @param {boolean} [options.carbonReactLoader]
-   * @param {boolean} [options.devtool]
+   * @param {DevTool} [options.devtool]
    */
   constructor(options = {}) {
     this.options = Object.assign({}, defaultOptions, options);
@@ -80,8 +109,8 @@ class CamundaModelerWebpackPlugin {
     compiler.hooks.afterEnvironment.tap('CamundaModelerWebpackPlugin', () => {
 
       // set best-practice devtool for source maps
-      if (devtool) {
-        compiler.options.devtool = 'cheap-module-source-map';
+      if (devtool !== undefined) {
+        compiler.options.devtool = devtool;
       }
 
       configs.forEach((config) => {

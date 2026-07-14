@@ -49,7 +49,7 @@ Following options are available:
 | `reactLoader` | true | Append React `babel-loader` configuration (requires `@babel/core` dependency) |
 | `carbonReactAlias` | true | Append Carbon `alias` configuration |
 | `carbonReactLoader` | true | Append React `babel-loader` configuration (requires `@babel/core` dependency) |
-| `devtool` | true | Set `devtool` to `cheap-module-source-map` |
+| `devtool` | `cheap-module-source-map` | Webpack [`devtool`](https://webpack.js.org/configuration/devtool/) to use, pass `false` to disable |
 | `type` |  | Specific type of the Camunda Modeler Plugin. Only [the configuration](./src/config/) of the given type will be appended. Allowed values: `react`, `carbonReact`, `propertiesPanel` |
 
 ## Resources
