@@ -71,6 +71,38 @@ describe('<CamundaModelerWebpackPlugin>', function() {
   });
 
 
+  it('should set devtool by default', async function() {
+
+    // given
+    const entry = './fixtures/noop-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin()
+    ]);
+
+    // then
+    expect(stats.compilation.options.devtool).to.eql('cheap-module-source-map');
+  });
+
+
+  it('should NOT set devtool if disabled', async function() {
+
+    // given
+    const entry = './fixtures/noop-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin({
+        devtool: false
+      })
+    ]);
+
+    // then
+    expect(stats.compilation.options.devtool).not.to.eql('cheap-module-source-map');
+  });
+
+
   it('should preserve custom rule', async function() {
 
     // given
