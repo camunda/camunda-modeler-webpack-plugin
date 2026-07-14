@@ -5,7 +5,8 @@ const defaultOptions = {
   reactAlias: true,
   reactLoader: true,
   carbonReactAlias: true,
-  carbonReactLoader: true
+  carbonReactLoader: true,
+  devtool: 'cheap-module-source-map'
 };
 
 const CONFIGURATIONS = [
@@ -43,6 +44,7 @@ class CamundaModelerWebpackPlugin {
    * @param {boolean} [options.reactLoader]
    * @param {boolean} [options.carbonReactAlias]
    * @param {boolean} [options.carbonReactLoader]
+   * @param {import('webpack').Configuration['devtool']} [options.devtool]
    */
   constructor(options = {}) {
     this.options = Object.assign({}, defaultOptions, options);
@@ -56,6 +58,7 @@ class CamundaModelerWebpackPlugin {
 
     const {
       type,
+      devtool
     } = options;
 
     let configs = [];
@@ -75,6 +78,11 @@ class CamundaModelerWebpackPlugin {
 
     // merge configs
     compiler.hooks.afterEnvironment.tap('CamundaModelerWebpackPlugin', () => {
+
+      // set best-practice devtool for source maps
+      if (devtool !== undefined) {
+        compiler.options.devtool = devtool;
+      }
 
       configs.forEach((config) => {
         const {
