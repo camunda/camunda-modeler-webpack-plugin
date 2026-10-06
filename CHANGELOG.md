@@ -7,6 +7,7 @@ All notable changes to [camunda-modeler-webpack-plugin](https://github.com/camun
 ___Note:__ Yet to be released changes appear here._
 
 * `FEAT`: remove `@carbon/react` support
+* `FEAT`: warn when a plug-in imports Carbon
 
 ### Breaking Changes
 
