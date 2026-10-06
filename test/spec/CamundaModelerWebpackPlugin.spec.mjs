@@ -143,4 +143,56 @@ describe('<CamundaModelerWebpackPlugin>', function() {
     expect(stats.compilation.options.module.rules).to.include(styleRule);
   });
 
+
+  it('should warn about Carbon import', async function() {
+
+    // given
+    const entry = './fixtures/carbon-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin()
+    ]);
+
+    // then
+    const messages = stats.compilation.warnings.map(warning => warning.message);
+
+    expect(messages).to.eql([
+      'fixtures/carbon-extension/index.js imports <@carbon/react>: ' +
+      'Camunda Modeler does not provide Carbon to plug-ins, use `camunda-modeler-plugin-helpers/components` ' +
+      'or the Camunda Design System (https://github.com/camunda/design-system) instead'
+    ]);
+  });
+
+
+  it('should NOT warn without Carbon import', async function() {
+
+    // given
+    const entry = './fixtures/client-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin()
+    ]);
+
+    // then
+    expect(stats.compilation.warnings).to.be.empty;
+  });
+
+
+  it('should warn about Carbon import once with multiple plugin instances', async function() {
+
+    // given
+    const entry = './fixtures/carbon-extension/index.js';
+
+    // when
+    const { stats } = await compile(entry, [
+      new CamundaModelerWebpackPlugin({ type: 'react' }),
+      new CamundaModelerWebpackPlugin({ type: 'propertiesPanel' })
+    ]);
+
+    // then
+    expect(stats.compilation.warnings).to.have.length(1);
+  });
+
 });

@@ -1,3 +1,12 @@
+const { relative } = require('path');
+
+const CARBON_REQUEST = /^(@carbon\/|camunda-modeler-plugin-helpers\/vendor\/@carbon\/)/;
+
+const NODE_MODULES = /[\\/]node_modules[\\/]/;
+
+// shared by all plugin instances, so every Carbon import is reported once per compilation
+const reportedCarbonImports = new WeakMap();
+
 const defaultOptions = {
   type: '',
   propertiesPanelAlias: true,
@@ -98,6 +107,36 @@ class CamundaModelerWebpackPlugin {
             ...webpackConfig.resolve.alias
           };
         }
+      });
+    });
+
+    compiler.hooks.thisCompilation.tap('CamundaModelerWebpackPlugin', (compilation, { normalModuleFactory }) => {
+      if (!reportedCarbonImports.has(compilation)) {
+        reportedCarbonImports.set(compilation, new Set());
+      }
+
+      const reported = reportedCarbonImports.get(compilation);
+
+      normalModuleFactory.hooks.beforeResolve.tap('CamundaModelerWebpackPlugin', ({ request, contextInfo }) => {
+        const issuer = contextInfo.issuer;
+
+        if (!CARBON_REQUEST.test(request) || !issuer || NODE_MODULES.test(issuer)) {
+          return;
+        }
+
+        const key = `${ issuer }:${ request }`;
+
+        if (reported.has(key)) {
+          return;
+        }
+
+        reported.add(key);
+
+        compilation.warnings.push(new compiler.webpack.WebpackError(
+          `${ relative(compiler.context, issuer) } imports <${ request }>: ` +
+          'Camunda Modeler does not provide Carbon to plug-ins, use `camunda-modeler-plugin-helpers/components` ' +
+          'or the Camunda Design System (https://github.com/camunda/design-system) instead'
+        ));
       });
     });
   }
