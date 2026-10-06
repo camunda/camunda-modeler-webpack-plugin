@@ -4,8 +4,6 @@ const defaultOptions = {
   propertiesPanelLoader: true,
   reactAlias: true,
   reactLoader: true,
-  carbonReactAlias: true,
-  carbonReactLoader: true,
   devtool: 'cheap-module-source-map'
 };
 
@@ -21,13 +19,7 @@ const CONFIGURATIONS = [
     path: './config/react.config.js',
     aliasFlag: 'reactAlias',
     loaderFlag: 'reactLoader'
-  },
-  {
-    key: 'carbonReact',
-    path: './config/carbon-react.config.js',
-    aliasFlag: 'carbonReactAlias',
-    loaderFlag: 'carbonReactLoader'
-  },
+  }
 ];
 
 
@@ -37,13 +29,11 @@ class CamundaModelerWebpackPlugin {
    * Webpack plugin to easily configure Camunda Modeler extensions.
    *
    * @param {Object} [options]
-   * @param {('propertiesPanel'|'react'|'carbonReact')} [options.type]
+   * @param {('propertiesPanel'|'react')} [options.type]
    * @param {boolean} [options.propertiesPanelAlias]
    * @param {boolean} [options.propertiesPanelLoader]
    * @param {boolean} [options.reactAlias]
    * @param {boolean} [options.reactLoader]
-   * @param {boolean} [options.carbonReactAlias]
-   * @param {boolean} [options.carbonReactLoader]
    * @param {import('webpack').Configuration['devtool']} [options.devtool]
    */
   constructor(options = {}) {

@@ -6,6 +6,12 @@ All notable changes to [camunda-modeler-webpack-plugin](https://github.com/camun
 
 ___Note:__ Yet to be released changes appear here._
 
+* `FEAT`: remove `@carbon/react` support
+
+### Breaking Changes
+
+* The `carbonReactAlias` and `carbonReactLoader` options and the `carbonReact` type are removed, Camunda Modeler no longer provides Carbon to plug-ins.
+
 ## 0.3.0
 
 * `FEAT`: use `cheap-module-source-map` as default devtool option ([#3](https://github.com/camunda/camunda-modeler-webpack-plugin/issues/3))
