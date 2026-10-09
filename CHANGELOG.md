@@ -10,6 +10,7 @@ ___Note:__ Yet to be released changes appear here._
 * `FEAT`: warn when a plug-in imports Carbon
 * `DEPS`: update to `@babel/plugin-transform-react-jsx@7.29.7`
 * `DEPS`: update to `@babel/preset-react@7.29.7`
+* `DEPS`: update to `babel-loader@8.4.1`
 
 ### Breaking Changes
 
