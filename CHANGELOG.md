@@ -6,6 +6,8 @@ All notable changes to [camunda-modeler-webpack-plugin](https://github.com/camun
 
 ___Note:__ Yet to be released changes appear here._
 
+## 1.0.0
+
 * `FEAT`: remove `@carbon/react` support
 * `FEAT`: warn when a plug-in imports Carbon
 * `DEPS`: update to `@babel/plugin-transform-react-jsx@7.29.7`
